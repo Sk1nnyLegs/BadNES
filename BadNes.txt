@@ -1,0 +1,27 @@
+BadNES
+
+CPU:
+MAIN LOOP
+-each component has step function
+-steps 1 clock cycle
+-main clock is just loop that calls step 1 on each
+-everything should happen in 'parralel' so buffer changes and apply side effects at end of cycle (apply function?) 
+CPU
+-instructions take extra arg of cycle num/keep track of cycle?
+	-or maybe components have internal clock that instructions can increment/reset
+	-so if intclck 0 then do next instruction (for one cycle instructions)
+	-multi cycle can set remains cycles used and count down
+-so multisteps can actually do each step in each cycle	
+-cpu exec function switch case to work out which instruction
+	-macro to buid switch
+	-like this from neschan
+-#define IS_ALU_OP_CODE_(op, offset, mode) case nes_op_code::op##_base + offset : op(nes_addr_mode::nes_addr_mode_##mode); break;
+#define IS_ALU_OP_CODE(op) \
+    IS_ALU_OP_CODE_(op, 0x9, imm) \
+    IS_ALU_OP_CODE_(op, 0x5, zp) \
+    IS_ALU_OP_CODE_(op, 0x15, zp_ind_x) \
+    IS_ALU_OP_CODE_(op, 0xd, abs) \
+    IS_ALU_OP_CODE_(op, 0x1d, abs_x) \
+    IS_ALU_OP_CODE_(op, 0x19, abs_y) \
+    IS_ALU_OP_CODE_(op, 0x1, ind_x) \
+    IS_ALU_OP_CODE_(op, 0x11, ind_y)
